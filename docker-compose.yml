@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: kpi_drive_app
+    ports:
+      - "8001:8001"
+    environment:
+      - CONFIG_PATH=/app/config/config.yaml
+    depends_on:
+      - nats-streaming
+    command: ["/app/dataBuf"]
+
+  nats-publisher:
+    build: .
+    container_name: nats_publisher
+    environment:
+      - CONFIG_PATH=/app/config/config.yaml
+    depends_on:
+      - nats-streaming
+    command: ["/app/natsPub"]
+
+  nats-streaming:
+    image: nats-streaming
+    container_name: nats_streaming
+    ports:
+      - "4223:4223"
+      - "8223:8223"
+    command: -p 4223 -m 8223

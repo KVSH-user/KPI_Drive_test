@@ -5,10 +5,13 @@ import (
 	"encoding/json"
 	"github.com/nats-io/stan.go"
 	"log"
+	"time"
 )
 
 func main() {
-	sc, err := stan.Connect("test-cluster", "publisher-client", stan.NatsURL("nats://localhost:4223"))
+	log.Println("Сейчас отправим 10 фактов!")
+	time.Sleep(3 * time.Second)
+	sc, err := stan.Connect("test-cluster", "publisher-client", stan.NatsURL("nats://nats-streaming:4223"))
 	if err != nil {
 		log.Fatal("cant connect to NATS: ", err)
 	}
@@ -41,4 +44,6 @@ func main() {
 			log.Println("Error publishing to NATS:", err)
 		}
 	}
+
+	log.Println("Отправили 10 фактов!")
 }
